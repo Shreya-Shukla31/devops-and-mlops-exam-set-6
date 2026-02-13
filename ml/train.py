@@ -1,4 +1,3 @@
-train.py code:
 import pandas as pd
 import joblib
 import yaml

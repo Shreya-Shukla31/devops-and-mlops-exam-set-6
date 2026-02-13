@@ -1,4 +1,3 @@
-# TODO: Students must fix workflow
 name: CI Pipeline
 
 on:
@@ -13,14 +12,26 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
       - name: Install dependencies
         run: |
-          echo "TODO: pip install -r requirements"
+          pip install -r api/requirements.txt
+          pip install pandas scikit-learn joblib mlflow python-dotenv pyyaml
 
-      - name: Run tests
+      - name: Run training script
         run: |
-          echo "TODO: run test script"
+          python ml/train.py
 
       - name: Build Docker image
         run: |
-          echo "TODO: docker build"
+          docker build -t kt-fastapi .
+
+      - name: Run container test
+        run: |
+          docker run -d -p 8000:8000 kt-fastapi
+          sleep 5
+          curl http://127.0.0.1:8000/
